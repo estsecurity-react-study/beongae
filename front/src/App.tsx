@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Routes, Route, Outlet, Link } from 'react-router-dom';
+import { Routes, Route, useNavigate } from 'react-router-dom';
 
 import Layout from '@/components/Layout';
 import Home from '@/pages/home';
@@ -11,8 +11,19 @@ function App({ name }: { name?: string }) {
   const [count, setCount] = useState(0);
   const abc = 1;
 
+  const navigate = useNavigate();
+
   useEffect(() => {
     console.log(name);
+    const init = () => {
+      // const user = await getUser();
+      const user = false;
+      if (!user) {
+        console.log('init /login');
+        return navigate('/login');
+      }
+    };
+    // init();
   }, []);
 
   return (
