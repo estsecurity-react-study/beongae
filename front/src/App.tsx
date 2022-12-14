@@ -1,31 +1,49 @@
-import { useState } from 'react';
-import reactLogo from './assets/react.svg';
-import './App.css';
+import { useEffect, useState } from 'react';
+import { Routes, Route, Outlet, Link } from 'react-router-dom';
 
-function App() {
+import Layout from '@/components/Layout';
+import Home from '@/pages/home';
+import Login from '@/pages/login';
+import Join from '@/pages/join';
+import NoMatch from '@/pages/NoMatch';
+
+function App({ name }: { name?: string }) {
   const [count, setCount] = useState(0);
   const abc = 1;
 
+  useEffect(() => {
+    console.log(name);
+  }, []);
+
   return (
-    <div className="App">
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src="/vite.svg" className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>count is {count}</button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">Click on the Vite and React logos to learn more</p>
-    </div>
+    <Routes>
+      <Route path="/login" element={<Login />} />
+      <Route path="/join" element={<Join />} />
+      <Route path="/" element={<Layout />}>
+        <Route index element={<Home />} />
+        {/* <Route path="about" element={<About />} />
+          <Route path="dashboard" element={<Dashboard />} /> */}
+
+        <Route path="*" element={<NoMatch />} />
+      </Route>
+    </Routes>
   );
 }
+
+// function About() {
+//   return (
+//     <div>
+//       <h2>About</h2>
+//     </div>
+//   );
+// }
+
+// function Dashboard() {
+//   return (
+//     <div>
+//       <h2>Dashboard</h2>
+//     </div>
+//   );
+// }
 
 export default App;
