@@ -21,7 +21,8 @@
       "@/pages/*": ["src/pages/*"],
       "@/utils/*": ["src/utils/*"]
     },
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+    "jsxImportSource": "@emotion/react"
   },
   "include": ["src"],
   "references": [{ "path": "./tsconfig.node.json" }]
