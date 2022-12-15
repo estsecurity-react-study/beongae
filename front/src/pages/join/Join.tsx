@@ -1,9 +1,24 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import clsx from 'clsx';
+import { useForm, SubmitHandler } from 'react-hook-form';
 
 import styles from './Join.module.scss';
 
+interface IFormInput {
+  userId: string;
+  password: string;
+  userName: string;
+}
+
 const Join = () => {
+  const {
+    register,
+    formState: { errors },
+    handleSubmit,
+  } = useForm<IFormInput>();
+
+  const onSubmit: SubmitHandler<IFormInput> = useCallback((data) => console.log(data), []);
+
   return (
     <div className={styles.container}>
       <h2>Join</h2>
@@ -16,10 +31,13 @@ const Join = () => {
             <input
               className={styles.input}
               type="text"
-              name="userId"
+              // name="userId"
+              {...register('userId', { required: true })}
               placeholder="아이디를 입력해주세요."
             />
-            <div className={styles.errorText}>아이디를 올바르게 입력하세요.</div>
+            {errors.userId?.type === 'required' && (
+              <div className={styles.errorText}>아이디는 필수입력 항목입니다.</div>
+            )}
           </div>
         </div>
 
@@ -31,9 +49,17 @@ const Join = () => {
             <input
               className={styles.input}
               type="password"
-              name="password"
+              // name="password"
+              {...register('password', {
+                required: '비밀번호는 필수입력 항목입니다.',
+                pattern: {
+                  value: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,15}$/g,
+                  message: '8~15자리 영문+숫자+특수문자 조합으로 입력하세요.',
+                },
+              })}
               placeholder="비밀번호를 입력해주세요."
             />
+            {errors.password && <div className={styles.errorText}>{errors.password?.message}</div>}
           </div>
         </div>
 
@@ -43,18 +69,20 @@ const Join = () => {
             <input
               className={styles.input}
               type="text"
-              name="userName"
+              // name="userName"
+              {...register('userName')}
               placeholder="이름을 입력해주세요."
             />
           </div>
         </div>
 
         <div className={styles.joinWrapper}>
-          <button className={styles.btnJoin} type="button">
+          <button className={styles.btnJoin} type="button" onClick={handleSubmit(onSubmit)}>
             회원 가입
           </button>
         </div>
       </form>
+
       <div className={styles.snsWrapper}>
         <p>SNS 아이디로 간편하게 가입하세요.</p>
         <button className={clsx(styles.btnSns, styles.btnKakao)} type="button">
