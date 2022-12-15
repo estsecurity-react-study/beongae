@@ -20,4 +20,9 @@ export default defineConfig({
       { find: '@/utils', replacement: path.resolve(__dirname, 'src/utils') },
     ],
   },
+  css: {
+    modules: {
+      localsConvention: 'camelCase',
+    },
+  },
 });
