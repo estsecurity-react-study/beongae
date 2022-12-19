@@ -1,4 +1,5 @@
 import React, { useCallback, useState } from 'react';
+import { Link } from 'react-router-dom';
 
 import {
   containerStyle,
@@ -8,6 +9,7 @@ import {
   btnEyeStyle,
   loginWrapperStyle,
   btnLoginStyle,
+  joinWrapperStyle,
   snsWrapperStyle,
   btnSnsStyle,
   btnKaKaoStyle,
@@ -52,6 +54,9 @@ const Login = () => {
           <button css={btnLoginStyle} type="button">
             로그인
           </button>
+        </div>
+        <div css={joinWrapperStyle}>
+          <Link to="/join">회원가입</Link>
         </div>
       </form>
       <div css={snsWrapperStyle}>

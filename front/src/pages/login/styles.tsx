@@ -65,6 +65,12 @@ export const btnLoginStyle = css`
   font-size: 18px;
 `;
 
+export const joinWrapperStyle = css`
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 4px;
+`;
+
 export const snsWrapperStyle = css`
   margin-top: 78px;
 `;

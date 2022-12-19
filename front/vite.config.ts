@@ -25,4 +25,11 @@ export default defineConfig({
       localsConvention: 'camelCase',
     },
   },
+  server: {
+    // https: true,
+    // port: 3000,
+    proxy: {
+      '/api': 'http://localhost:3030',
+    },
+  },
 });

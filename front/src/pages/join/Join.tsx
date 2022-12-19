@@ -1,6 +1,8 @@
 import React, { useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import clsx from 'clsx';
 import { useForm, SubmitHandler } from 'react-hook-form';
+import axios from 'axios';
 
 import styles from './Join.module.scss';
 
@@ -11,13 +13,25 @@ interface IFormInput {
 }
 
 const Join = () => {
+  const navigate = useNavigate();
+
   const {
     register,
     formState: { errors },
     handleSubmit,
   } = useForm<IFormInput>();
 
-  const onSubmit: SubmitHandler<IFormInput> = useCallback((data) => console.log(data), []);
+  const onSubmit: SubmitHandler<IFormInput> = useCallback(async (data) => {
+    try {
+      const createUser = await axios.post('/api/users', data);
+      console.log('createUser', createUser);
+      if (createUser.data) {
+        navigate('/login');
+      }
+    } catch (err) {
+      console.error('Error: /api/users');
+    }
+  }, []);
 
   return (
     <div className={styles.container}>
@@ -52,10 +66,10 @@ const Join = () => {
               // name="password"
               {...register('password', {
                 required: '비밀번호는 필수입력 항목입니다.',
-                pattern: {
-                  value: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,15}$/g,
-                  message: '8~15자리 영문+숫자+특수문자 조합으로 입력하세요.',
-                },
+                // pattern: {
+                //   value: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,15}$/g,
+                //   message: '8~15자리 영문+숫자+특수문자 조합으로 입력하세요.',
+                // },
               })}
               placeholder="비밀번호를 입력해주세요."
             />
