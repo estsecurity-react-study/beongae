@@ -31,4 +31,8 @@ export class User {
 
   @DeleteDateColumn({ nullable: true })
   deletedAt: Date | null;
+
+  // toJSON() {
+  //   return classToPlain(this);
+  // }
 }

@@ -8,14 +8,20 @@ import { User } from './entities/user.entity';
 
 @Injectable()
 export class UsersService {
-  constructor(@InjectRepository(User) private userRepository: Repository<User>) {}
+  constructor(@InjectRepository(User) private usersRepository: Repository<User>) {}
 
   async create(createUserDto: CreateUserDto) {
     const salt = await bcrypt.genSalt(12); // default 10
     const { password } = createUserDto;
     const hashPassword = await bcrypt.hash(password, salt);
 
-    const createUser = this.userRepository.create({ ...createUserDto, password: hashPassword });
-    return this.userRepository.save(createUser);
+    const createUser = this.usersRepository.create({ ...createUserDto, password: hashPassword });
+    return this.usersRepository.save(createUser);
+  }
+
+  findByUserId(userId: string) {
+    return this.usersRepository.findOne({
+      where: { userId },
+    });
   }
 }
