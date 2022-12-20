@@ -19,6 +19,12 @@ export class UsersService {
     return this.usersRepository.save(createUser);
   }
 
+  findById(id: number) {
+    return this.usersRepository.findOne({
+      where: { id },
+    });
+  }
+
   findByUserId(userId: string) {
     return this.usersRepository.findOne({
       where: { userId },
