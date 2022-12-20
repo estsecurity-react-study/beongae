@@ -2,6 +2,7 @@ import { Controller, Get, Post, Req, Res, UseGuards } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
 import { AuthService } from './auth.service';
+import { JwtAuthGuard } from './jwt-auth.guard';
 import { LocalAuthGuard } from './local-auth.guard';
 
 @ApiTags('Auth')
@@ -22,5 +23,18 @@ export class AuthController {
       httpOnly: true,
     });
     return req.user; // 필요에 맞게 token or user 리턴
+  }
+
+  @ApiOperation({ summary: '로그아웃' })
+  @UseGuards(JwtAuthGuard)
+  @Post('logout')
+  logout(@Res() res) {
+    res.cookie('Authorization', '', {
+      domain: 'localhost',
+      path: '/',
+      httpOnly: true,
+      expires: new Date(),
+    });
+    res.sendStatus(200);
   }
 }

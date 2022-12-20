@@ -15,7 +15,10 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
           return request?.cookies?.Authorization;
         },
       ]),
-      ignoreExpiration: false, // 토큰이 만료되었는지 검사 (true: strategy 단에서 에러로 리턴하지 않도록 설정, false: jwt token 보증을 passport 모듈에 위임함)
+      // 토큰이 만료되었는지 검사
+      // true: strategy 단에서 에러로 리턴하지 않도록 설정 - JwtAuthGuard 에서 토큰 체크
+      // false: jwt token 보증을 passport 모듈에 위임함
+      ignoreExpiration: false,
       secretOrKey: jwtConstants.secret,
     });
   }
