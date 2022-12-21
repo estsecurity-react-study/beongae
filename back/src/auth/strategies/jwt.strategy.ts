@@ -20,7 +20,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
         },
       ]),
       // 토큰이 만료되었는지 검사
-      // true: strategy 단에서 에러로 리턴하지 않도록 설정 - JwtAuthGuard 에서 토큰 체크
+      // true: strategy 단에서 에러로 리턴하지 않도록 설정 - 토큰 체크 어디서 하는지? (JwtAuthGuard 에서 토큰 체크??? - JwtAuthGuard 커스텀은 알아보자)
       // false: jwt token 보증을 passport 모듈에 위임함
       ignoreExpiration: false,
       secretOrKey: configService.get('JWT_SECRET'),
@@ -29,6 +29,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 
   // api 요청시 마다 호출됨
   async validate(payload: any) {
+    // TODO: JwtPayload 타입으로 하자
     console.log('JwtStrategy validate', payload);
     const user = await this.usersService.findById(payload.sub);
     if (!user) {
