@@ -1,13 +1,17 @@
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';
-import { Injectable } from '@nestjs/common';
-import { jwtConstants } from '../constants';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { Request } from 'express';
+
 import { UsersService } from 'src/users/users.service';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
-  constructor(private readonly usersService: UsersService) {
+  constructor(
+    private readonly configService: ConfigService,
+    private readonly usersService: UsersService,
+  ) {
     super({
       // jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(), // 요청 패킷 헤더의 Authorization 키에 저장된 값을 사용
       jwtFromRequest: ExtractJwt.fromExtractors([
@@ -19,7 +23,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       // true: strategy 단에서 에러로 리턴하지 않도록 설정 - JwtAuthGuard 에서 토큰 체크
       // false: jwt token 보증을 passport 모듈에 위임함
       ignoreExpiration: false,
-      secretOrKey: jwtConstants.secret,
+      secretOrKey: configService.get('JWT_SECRET'),
     });
   }
 
@@ -27,6 +31,10 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   async validate(payload: any) {
     console.log('JwtStrategy validate', payload);
     const user = await this.usersService.findById(payload.sub);
+    if (!user) {
+      throw new UnauthorizedException();
+    }
+
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { password, ...userWithoutPassword } = user;
     return userWithoutPassword; // req.user 에 할당됨
