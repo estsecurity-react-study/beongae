@@ -50,6 +50,12 @@ export const pwWrapperStyle = css`
   margin-top: 13px;
 `;
 
+export const errorTextStyle = css`
+  font-size: 13px;
+  color: rgb(240, 63, 64);
+  margin-top: 4px;
+`;
+
 export const loginWrapperStyle = css`
   margin-top: 14px;
 `;

@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react';
-import { Routes, Route, useNavigate } from 'react-router-dom';
+import { useEffect, useLayoutEffect, useState } from 'react';
+import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
+import axios from 'axios';
 
 import Layout from '@/components/Layout';
 import Home from '@/pages/home';
@@ -12,19 +13,37 @@ function App({ name }: { name?: string }) {
   const abc = 1;
 
   const navigate = useNavigate();
+  const location = useLocation();
 
-  useEffect(() => {
-    console.log(name);
-    const init = () => {
-      // const user = await getUser();
-      const user = false;
-      if (!user) {
-        console.log('init /login');
-        return navigate('/login');
+  const [isInitialize, setIsInitialize] = useState(false);
+
+  useLayoutEffect(() => {
+    console.log('App Init =========', name);
+
+    const init = async () => {
+      try {
+        const me = await axios.get('/api/auth/profile');
+
+        if (!me.data) {
+          return navigate('/login');
+        }
+
+        const { pathname } = location;
+        if (pathname === '/login' || pathname === '/join') {
+          navigate('/');
+        }
+      } catch (err) {
+        navigate('/login');
+      } finally {
+        setIsInitialize(true);
       }
     };
-    // init();
+    init();
   }, []);
+
+  if (!isInitialize) {
+    return null;
+  }
 
   return (
     <Routes>

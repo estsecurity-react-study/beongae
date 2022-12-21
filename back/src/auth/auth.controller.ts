@@ -37,4 +37,12 @@ export class AuthController {
     });
     res.sendStatus(200);
   }
+
+  @ApiOperation({ summary: '내 정보' })
+  @UseGuards(JwtAuthGuard)
+  @Get('profile')
+  getProfile(@Req() req) {
+    console.log('AuthController getProfile', req.user);
+    return req.user;
+  }
 }

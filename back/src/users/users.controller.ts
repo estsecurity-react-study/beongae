@@ -1,6 +1,5 @@
-import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Post } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 import { CreateUserDto } from './dto/create-user.dto';
 import { UsersService } from './users.service';
@@ -10,17 +9,20 @@ import { UsersService } from './users.service';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
+  // TODO: auth 로 이동(register), 여기는 admin만 접근 가능한 create 로 변경
   @ApiOperation({ summary: '회원가입' })
   @Post()
   join(@Body() createUserDto: CreateUserDto) {
     return this.usersService.create(createUserDto);
   }
 
-  @ApiOperation({ summary: '내 정보' })
-  @UseGuards(JwtAuthGuard)
-  @Get('profile')
-  getProfile(@Req() req) {
-    console.log('UsersController getProfile', req.user);
-    return req.user;
-  }
+  // @Patch(':id')
+  // update(@Param('id') id: number, @Body() updateProfileDto: UpdateUserDto) {
+  //   return this.usersService.update(id, updateProfileDto);
+  // }
+
+  // @Delete(':id')
+  // remove(@Param('id') id: number) {
+  //   return this.usersService.softDelete(id);
+  // }
 }

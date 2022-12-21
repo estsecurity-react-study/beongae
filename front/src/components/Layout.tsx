@@ -1,7 +1,22 @@
-import React from 'react';
-import { Outlet, Link } from 'react-router-dom';
+import React, { useCallback } from 'react';
+import { Outlet, Link, useNavigate, Navigate } from 'react-router-dom';
+import axios from 'axios';
 
-const Layout = () => {
+const Layout: React.FC = () => {
+  const navigate = useNavigate();
+
+  const handleLogout = useCallback(async () => {
+    try {
+      const result = await axios.post('/api/auth/logout');
+      console.log('result', result);
+      if (result.data) {
+        navigate('/login');
+      }
+    } catch (err) {
+      console.error('Error: /api/auth/logout');
+    }
+  }, []);
+
   return (
     <div>
       {/* A "layout route" is a good place to put markup you want to
@@ -19,6 +34,9 @@ const Layout = () => {
           </li>
           <li>
             <Link to="/nothing-here">Nothing Here</Link>
+          </li>
+          <li>
+            <button onClick={handleLogout}>로그아웃</button>
           </li>
         </ul>
       </nav>
