@@ -4,11 +4,11 @@ import { Repository } from 'typeorm';
 import bcrypt from 'bcrypt';
 
 import { CreateUserDto } from './dto/create-user.dto';
-import { UserEntity } from './entities/user.entity';
+import { User } from './entities/user.entity';
 
 @Injectable()
 export class UsersService {
-  constructor(@InjectRepository(UserEntity) private usersRepository: Repository<UserEntity>) {}
+  constructor(@InjectRepository(User) private usersRepository: Repository<User>) {}
 
   async create(createUserDto: CreateUserDto) {
     const salt = await bcrypt.genSalt(12); // default 10

@@ -8,8 +8,8 @@ import {
 } from 'typeorm';
 import { Exclude } from 'class-transformer';
 
-@Entity('user')
-export class UserEntity {
+@Entity()
+export class User {
   @PrimaryGeneratedColumn()
   id: number;
 
