@@ -4,7 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { User } from './users/entities/user.entity';
+import { UserEntity } from './users/entities/user.entity';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 
@@ -19,7 +19,7 @@ import { AuthModule } from './auth/auth.module';
       password: process.env.DB_PASSWORD,
       database: process.env.DB_DATABASE,
       // entities: ['./**/*.entity{.ts,.js}'],
-      entities: [User],
+      entities: [UserEntity],
       // migrations: ['./database/migrations/**/*{.ts,.js}'],
       synchronize: false,
       logging: true,
