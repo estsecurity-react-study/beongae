@@ -5,6 +5,7 @@ import { ConfigService } from '@nestjs/config';
 import { Request } from 'express';
 
 import { UsersService } from 'src/users/users.service';
+import { JwtPayload } from '../jwt-payload.interface';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
@@ -28,8 +29,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   // api 요청시 마다 호출됨
-  async validate(payload: any) {
-    // TODO: JwtPayload 타입으로 하자
+  async validate(payload: JwtPayload) {
     console.log('JwtStrategy validate', payload);
     const user = await this.usersService.findById(payload.sub);
     if (!user) {
