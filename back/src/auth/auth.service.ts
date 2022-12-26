@@ -5,6 +5,7 @@ import bcrypt from 'bcrypt';
 
 import { User } from 'src/users/entities/user.entity';
 import { UsersService } from 'src/users/users.service';
+import { RegisterUserDto } from './dto/register-user.dto';
 
 import { JwtPayload } from './jwt-payload.interface';
 
@@ -27,9 +28,12 @@ export class AuthService {
         // return userWithoutPassword; // user entity 에서 @Exclude 로 처리
         return user;
       }
-      return null;
     }
     return null;
+  }
+
+  register(registerUserDto: RegisterUserDto) {
+    return this.usersService.create(registerUserDto);
   }
 
   async login(user: User) {

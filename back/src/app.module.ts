@@ -21,7 +21,7 @@ import { AuthModule } from './auth/auth.module';
       // entities: ['./**/*.entity{.ts,.js}'],
       entities: [User],
       // migrations: ['./database/migrations/**/*{.ts,.js}'],
-      synchronize: true,
+      synchronize: false,
       logging: true,
       keepConnectionAlive: true, // TODO: deprecated 됨
       charset: 'utf8mb4',

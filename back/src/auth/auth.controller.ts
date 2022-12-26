@@ -1,7 +1,8 @@
-import { Controller, Get, Post, Req, Res, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, Req, Res, UseGuards } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
 import { AuthService } from './auth.service';
+import { RegisterUserDto } from './dto/register-user.dto';
 import { JwtAuthGuard } from './jwt-auth.guard';
 import { jwtCookieOptions } from './jwt-cookie.options';
 import { JwtRefreshAuthGuard } from './jwt-refresh-auth.guard';
@@ -11,6 +12,12 @@ import { LocalAuthGuard } from './local-auth.guard';
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
+
+  @ApiOperation({ summary: '회원가입' })
+  @Post('register')
+  register(@Body() registerUserDto: RegisterUserDto) {
+    return this.authService.register(registerUserDto);
+  }
 
   @ApiOperation({ summary: '로그인' })
   @UseGuards(LocalAuthGuard)
