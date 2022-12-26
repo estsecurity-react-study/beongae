@@ -32,6 +32,11 @@ export class User {
   @DeleteDateColumn({ nullable: true })
   deletedAt: Date | null;
 
+  // refresh token 저장
+  @Exclude()
+  @Column({ nullable: true })
+  hashedRefreshToken: string;
+
   // toJSON() {
   //   return classToPlain(this);
   // }

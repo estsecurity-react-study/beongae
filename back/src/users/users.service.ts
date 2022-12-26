@@ -3,8 +3,9 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import bcrypt from 'bcrypt';
 
-import { CreateUserDto } from './dto/create-user.dto';
 import { User } from './entities/user.entity';
+import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UsersService {
@@ -29,5 +30,25 @@ export class UsersService {
     return this.usersRepository.findOne({
       where: { userId },
     });
+  }
+
+  update(id: number, updateUserDto: UpdateUserDto) {
+    const updateUser = this.usersRepository.create({
+      id,
+      ...updateUserDto,
+    });
+    return this.usersRepository.save(updateUser);
+  }
+
+  async softDelete(id: number): Promise<void> {
+    await this.usersRepository.softDelete(id);
+  }
+
+  async updateRefreshToken(id: number, refreshToken: string) {
+    const hashedRefreshToken = await bcrypt.hash(refreshToken, 12);
+    // const updateUser = await this.usersRepository.findOne({ where: { id } });
+    // updateUser.hashedRefreshToken = hashedRefreshToken;
+    // return this.usersRepository.save(updateUser);
+    return this.usersRepository.update(id, { hashedRefreshToken });
   }
 }

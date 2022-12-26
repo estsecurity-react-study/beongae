@@ -3,6 +3,7 @@ import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
 import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './jwt-auth.guard';
+import { jwtCookieOptions } from './jwt-cookie.options';
 import { LocalAuthGuard } from './local-auth.guard';
 
 @ApiTags('Auth')
@@ -16,12 +17,15 @@ export class AuthController {
   async login(@Req() req, @Res({ passthrough: true }) res) {
     console.log('AuthController login', req.user);
 
-    const { access_token } = await this.authService.login(req.user);
-    res.cookie('Authorization', access_token, {
-      domain: 'localhost',
-      path: '/',
-      httpOnly: true,
-    });
+    const { access_token, refresh_token } = await this.authService.login(req.user);
+
+    // refresh token update - user db table
+    await this.authService.updateRefreshToken(req.user.id, refresh_token);
+
+    // 쿠키에 token 설정
+    res.cookie('Authorization', access_token, jwtCookieOptions);
+    res.cookie('REFRESH_TOKEN', refresh_token, jwtCookieOptions);
+
     return req.user; // 필요에 맞게 token or user 리턴
   }
 
@@ -29,12 +33,12 @@ export class AuthController {
   @UseGuards(JwtAuthGuard)
   @Post('logout')
   logout(@Res() res) {
-    res.cookie('Authorization', '', {
-      domain: 'localhost',
-      path: '/',
-      httpOnly: true,
+    const options = {
+      ...jwtCookieOptions,
       expires: new Date(),
-    });
+    };
+    res.cookie('Authorization', '', options);
+    res.cookie('REFRESH_TOKEN', '', options);
     res.sendStatus(200);
   }
 
