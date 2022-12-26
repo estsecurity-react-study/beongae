@@ -4,6 +4,7 @@ import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './jwt-auth.guard';
 import { jwtCookieOptions } from './jwt-cookie.options';
+import { JwtRefreshAuthGuard } from './jwt-refresh-auth.guard';
 import { LocalAuthGuard } from './local-auth.guard';
 
 @ApiTags('Auth')
@@ -40,6 +41,18 @@ export class AuthController {
     res.cookie('Authorization', '', options);
     res.cookie('REFRESH_TOKEN', '', options);
     res.sendStatus(200);
+  }
+
+  @ApiOperation({ summary: 'Refresh Token 검증으로 Access Token 발급' })
+  @UseGuards(JwtRefreshAuthGuard)
+  @Post('refresh')
+  refresh(@Req() req, @Res({ passthrough: true }) res) {
+    const accessToken = this.authService.createAccessToken(req.user);
+
+    // 쿠키에 accessToken 설정
+    res.cookie('Authorization', accessToken, jwtCookieOptions);
+
+    return req.user;
   }
 
   @ApiOperation({ summary: '내 정보' })

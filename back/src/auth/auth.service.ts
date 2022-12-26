@@ -33,19 +33,25 @@ export class AuthService {
   }
 
   async login(user: User) {
-    const payload: JwtPayload = { username: user.userName, sub: user.id }; // TODO: 토큰 payload 는 다시 생각해 보자
-    console.log('AuthService login', payload);
+    console.log('AuthService login user', user);
     return {
-      access_token: this.createAccessToken(payload),
-      refresh_token: this.createRefreshToken(payload),
+      access_token: this.createAccessToken(user),
+      refresh_token: this.createRefreshToken(user),
     };
   }
 
-  createAccessToken(payload: JwtPayload) {
+  getJwtPayload(user: User) {
+    const payload: JwtPayload = { username: user.userName, sub: user.id }; // TODO: 토큰 payload 는 다시 생각해 보자
+    return payload;
+  }
+
+  createAccessToken(user: User) {
+    const payload = this.getJwtPayload(user);
     return this.jwtService.sign(payload);
   }
 
-  createRefreshToken(payload: JwtPayload) {
+  createRefreshToken(user: User) {
+    const payload = this.getJwtPayload(user);
     return this.jwtService.sign(payload, {
       secret: this.configService.get('JWT_REFRESH_SECRET'),
       expiresIn: +this.configService.get('JWT_REFRESH_EXPIRES_IN'),

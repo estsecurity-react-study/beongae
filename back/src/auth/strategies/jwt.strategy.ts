@@ -8,7 +8,7 @@ import { UsersService } from 'src/users/users.service';
 import { JwtPayload } from '../jwt-payload.interface';
 
 @Injectable()
-export class JwtStrategy extends PassportStrategy(Strategy) {
+export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
   constructor(
     private readonly configService: ConfigService,
     private readonly usersService: UsersService,
@@ -37,8 +37,10 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { password, ...userWithoutPassword } = user;
-    return userWithoutPassword; // req.user 에 할당됨
+    // const { password, ...userWithoutPassword } = user;
+    // return userWithoutPassword; // User Entity 에서 @Exclude 로 처리함.
+
+    return user; // req.user 에 할당됨
     // return { id: payload.sub, userName: payload.username }; // req.user 에 할당됨
   }
 }

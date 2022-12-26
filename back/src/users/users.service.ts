@@ -51,4 +51,15 @@ export class UsersService {
     // return this.usersRepository.save(updateUser);
     return this.usersRepository.update(id, { hashedRefreshToken });
   }
+
+  async getUserRefreshTokenMatching(id: number, refreshToken: string) {
+    const user = await this.findById(id);
+
+    const isRefreshTokenMatching = await bcrypt.compare(refreshToken, user.hashedRefreshToken);
+
+    if (isRefreshTokenMatching) {
+      return user;
+    }
+    return null;
+  }
 }
