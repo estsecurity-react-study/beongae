@@ -5,41 +5,51 @@ import { AuthGuard } from '@nestjs/passport';
 
 @Injectable()
 export class JwtAuthGuard extends AuthGuard('jwt') {
-  // JwtStrategy 의 ignoreExpiration 값과 연관해서 알아보자.(상관 없는 거 같음)
-  // constructor(
-  //   private readonly configService: ConfigService,
-  //   private readonly jwtService: JwtService,
-  // ) {
-  //   super();
-  // }
-  // async canActivate(context: ExecutionContext): Promise<boolean> {
-  //   await super.canActivate(context);
-  //   const request = context.switchToHttp().getRequest();
-  //   const token = request?.cookies?.Authorization;
-  //   console.log('JwtAuthGuard token', token);
-  //   if (token === undefined) {
-  //     throw new UnauthorizedException();
+  constructor(
+    private readonly configService: ConfigService,
+    private readonly jwtService: JwtService,
+  ) {
+    super();
+  }
+
+  canActivate(context: ExecutionContext) {
+    // Add your custom authentication logic here
+    // for example, call super.logIn(request) to establish a session.
+    const request = context.switchToHttp().getRequest();
+    const token = request?.cookies?.Authorization;
+    if (!token) {
+      throw new UnauthorizedException();
+    }
+    this.validateToken(token);
+
+    console.log('canActivate JwtAuthGuard token', token);
+    return super.canActivate(context); // 호출하면 jwt strategey 실행됨
+  }
+  // handleRequest(err, user, info) {
+  //   // You can throw an exception based on either "info" or "err" arguments
+  //   console.log('handleRequest');
+  //   if (err || !user) {
+  //     throw err || new UnauthorizedException();
   //   }
-  //   return this.validateToken(token);
+  //   return user;
   // }
-  // validateToken(token: string) {
-  //   const secretKey = this.configService.get('JWT_SECRET');
-  //   try {
-  //     const verify = this.jwtService.verify(token, { secret: secretKey });
-  //     console.log('verify', verify);
-  //     return verify ? true : false;
-  //   } catch (e) {
-  //     switch (e.message) {
-  //       // 토큰에 대한 오류를 판단합니다.
-  //       case 'INVALID_TOKEN':
-  //       case 'TOKEN_IS_ARRAY':
-  //       case 'NO_USER':
-  //         throw new HttpException('유효하지 않은 토큰입니다.', 401);
-  //       case 'EXPIRED_TOKEN':
-  //         throw new HttpException('토큰이 만료되었습니다.', 410);
-  //       default:
-  //         throw new HttpException('서버 오류입니다.', 500);
-  //     }
-  //   }
-  // }
+
+  validateToken(token: string) {
+    const secretKey = this.configService.get('JWT_SECRET');
+    try {
+      // jsonwebtoken
+      const verify = this.jwtService.verify(token, { secret: secretKey });
+      return verify; // jwt payload 를 리턴
+    } catch (err) {
+      if (err.message === 'jwt expired') {
+        console.log('expired token');
+        throw new HttpException('EXPIRED_TOKEN', 410);
+      } else if (err.message === 'invalid token') {
+        console.log('invalid token');
+        throw new HttpException('INVALID_TOKEN', 401);
+      } else {
+        throw new HttpException('서버 오류입니다.', 500);
+      }
+    }
+  }
 }
