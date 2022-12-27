@@ -44,8 +44,8 @@ export class UsersService {
     await this.usersRepository.softDelete(id);
   }
 
-  async updateRefreshToken(id: number, refreshToken: string) {
-    const hashedRefreshToken = await bcrypt.hash(refreshToken, 12);
+  async updateRefreshToken(id: number, refreshToken: string | null) {
+    const hashedRefreshToken = refreshToken ? await bcrypt.hash(refreshToken, 12) : null;
     // const updateUser = await this.usersRepository.findOne({ where: { id } });
     // updateUser.hashedRefreshToken = hashedRefreshToken;
     // return this.usersRepository.save(updateUser);

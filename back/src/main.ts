@@ -22,6 +22,13 @@ async function bootstrap() {
     new UndefinedToNullInterceptor(),
   );
   app.use(cookieParser());
+  // app.enableCors({
+  //   origin: true,
+  //   // origin: ['http://localhost:5173', 'http://localhost:3030'],
+  //   // methods: ['POST', 'GET'],
+  //   // allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
+  //   credentials: true,
+  // });
 
   const config = new DocumentBuilder()
     .setTitle('BEONGAE')

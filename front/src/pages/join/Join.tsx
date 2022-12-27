@@ -23,13 +23,13 @@ const Join = () => {
 
   const onSubmit: SubmitHandler<IFormInput> = useCallback(async (data) => {
     try {
-      const registerUser = await axios.post('/api/auth/register', data);
+      const registerUser = await axios.post('/auth/register', data);
       console.log('registerUser', registerUser);
       if (registerUser.data) {
         navigate('/login');
       }
     } catch (err) {
-      console.error('Error: /api/auth/register');
+      console.error('Error: /auth/register');
     }
   }, []);
 

@@ -40,13 +40,18 @@ export class AuthController {
   @ApiOperation({ summary: '로그아웃' })
   @UseGuards(JwtAuthGuard)
   @Post('logout')
-  logout(@Res() res) {
-    const options = {
-      ...jwtCookieOptions,
-      expires: new Date(),
-    };
-    res.cookie('Authorization', '', options);
-    res.cookie('REFRESH_TOKEN', '', options);
+  async logout(@Req() req, @Res() res) {
+    // const options = {
+    //   ...jwtCookieOptions,
+    //   expires: new Date(),
+    // };
+    // res.cookie('Authorization', '', options);
+    // res.cookie('REFRESH_TOKEN', '', options);
+    // TODO: logout 예외처리 해야함 (JwtAuthGuard 사용할지 따로 guard 만들지 생각해보자)
+    res.clearCookie('Authorization', jwtCookieOptions);
+    res.clearCookie('REFRESH_TOKEN', jwtCookieOptions);
+    await this.authService.updateRefreshToken(req.user.id, null);
+
     res.sendStatus(200);
   }
 
@@ -66,7 +71,6 @@ export class AuthController {
   @UseGuards(JwtAuthGuard)
   @Get('profile')
   getProfile(@Req() req) {
-    console.log('AuthController getProfile', req.user);
     return req.user;
   }
 }

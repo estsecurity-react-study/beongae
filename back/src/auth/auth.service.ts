@@ -62,7 +62,7 @@ export class AuthService {
     });
   }
 
-  updateRefreshToken(id: number, refreshToken: string) {
+  updateRefreshToken(id: number, refreshToken: string | null) {
     return this.usersService.updateRefreshToken(id, refreshToken);
   }
 }

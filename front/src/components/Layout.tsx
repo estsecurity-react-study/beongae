@@ -7,13 +7,13 @@ const Layout: React.FC = () => {
 
   const handleLogout = useCallback(async () => {
     try {
-      const result = await axios.post('/api/auth/logout');
+      const result = await axios.post('/auth/logout');
       console.log('result', result);
       if (result.data) {
         navigate('/login');
       }
     } catch (err) {
-      console.error('Error: /api/auth/logout');
+      console.error('Error: /auth/logout');
     }
   }, []);
 

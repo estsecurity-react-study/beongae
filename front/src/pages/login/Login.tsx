@@ -47,13 +47,13 @@ const Login: React.FC = () => {
 
   const onSubmit: SubmitHandler<IFormInput> = useCallback(async (data) => {
     try {
-      const loggedUser = await axios.post('/api/auth/login', data);
+      const loggedUser = await axios.post('/auth/login', data);
       console.log('loggedUser', loggedUser);
       if (loggedUser.data) {
         navigate('/');
       }
     } catch (err) {
-      console.error('Error: /api/auth/login');
+      console.error('Error: /auth/login');
     }
   }, []);
 

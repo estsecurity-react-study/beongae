@@ -22,7 +22,7 @@ function App({ name }: { name?: string }) {
 
     const init = async () => {
       try {
-        const me = await axios.get('/api/auth/profile');
+        const me = await axios.get('/auth/profile');
 
         if (!me.data) {
           return navigate('/login');
