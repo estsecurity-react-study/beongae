@@ -3,10 +3,10 @@ import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
 import { AuthService } from './auth.service';
 import { RegisterUserDto } from './dto/register-user.dto';
-import { JwtAuthGuard } from './jwt-auth.guard';
+import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import { JwtRefreshAuthGuard } from './guards/jwt-refresh-auth.guard';
+import { LocalAuthGuard } from './guards/local-auth.guard';
 import { jwtCookieOptions } from './jwt-cookie.options';
-import { JwtRefreshAuthGuard } from './jwt-refresh-auth.guard';
-import { LocalAuthGuard } from './local-auth.guard';
 
 @ApiTags('Auth')
 @Controller('auth')
