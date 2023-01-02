@@ -35,6 +35,7 @@ export class JwtRefreshStrategy extends PassportStrategy(Strategy, 'jwt-refresh'
     }
 
     return user; // req.user 에 할당됨
-    // return { id: payload.sub, userName: payload.username }; // req.user 에 할당됨
+    // const { sub, username } = payload;
+    // return { sub, username }; // req.user 에 할당됨
   }
 }

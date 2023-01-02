@@ -36,30 +36,32 @@ export class AuthService {
     return this.usersService.create(registerUserDto);
   }
 
-  async login(user: User) {
-    console.log('AuthService login user', user);
+  me(id: number) {
+    return this.usersService.findById(id);
+  }
+
+  async createTokens(payload: JwtPayload) {
+    console.log('AuthService createTokens payload', payload);
     return {
-      access_token: this.createAccessToken(user),
-      refresh_token: this.createRefreshToken(user),
+      access_token: this.createAccessToken(payload),
+      refresh_token: this.createRefreshToken(payload),
     };
+  }
+
+  createAccessToken(payload: JwtPayload) {
+    return this.jwtService.sign(payload);
+  }
+
+  createRefreshToken(payload: JwtPayload) {
+    return this.jwtService.sign(payload, {
+      secret: this.configService.get('JWT_REFRESH_SECRET'),
+      expiresIn: +this.configService.get('JWT_REFRESH_EXPIRES_IN'),
+    });
   }
 
   getJwtPayload(user: User) {
     const payload: JwtPayload = { username: user.userName, sub: user.id }; // TODO: 토큰 payload 는 다시 생각해 보자
     return payload;
-  }
-
-  createAccessToken(user: User) {
-    const payload = this.getJwtPayload(user);
-    return this.jwtService.sign(payload);
-  }
-
-  createRefreshToken(user: User) {
-    const payload = this.getJwtPayload(user);
-    return this.jwtService.sign(payload, {
-      secret: this.configService.get('JWT_REFRESH_SECRET'),
-      expiresIn: +this.configService.get('JWT_REFRESH_EXPIRES_IN'),
-    });
   }
 
   updateRefreshToken(id: number, refreshToken: string | null) {

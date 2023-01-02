@@ -40,7 +40,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
     // const { password, ...userWithoutPassword } = user;
     // return userWithoutPassword; // User Entity 에서 @Exclude 로 처리함.
 
-    return user; // req.user 에 할당됨
-    // return { id: payload.sub, userName: payload.username }; // req.user 에 할당됨
+    // return user; // req.user 에 할당됨
+    return payload; // req.user 에 할당됨
   }
 }

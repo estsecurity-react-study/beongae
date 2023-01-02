@@ -7,6 +7,7 @@ import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { JwtRefreshAuthGuard } from './guards/jwt-refresh-auth.guard';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { jwtCookieOptions } from './jwt-cookie.options';
+import { JwtPayload } from './jwt-payload.interface';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -25,7 +26,8 @@ export class AuthController {
   async login(@Req() req, @Res({ passthrough: true }) res) {
     console.log('AuthController login', req.user);
 
-    const { access_token, refresh_token } = await this.authService.login(req.user);
+    const payload: JwtPayload = this.authService.getJwtPayload(req.user);
+    const { access_token, refresh_token } = await this.authService.createTokens(payload);
 
     // refresh token update - user db table
     await this.authService.updateRefreshToken(req.user.id, refresh_token);
@@ -48,9 +50,10 @@ export class AuthController {
     // res.cookie('Authorization', '', options);
     // res.cookie('REFRESH_TOKEN', '', options);
     // TODO: logout 예외처리 해야함 (JwtAuthGuard 사용할지 따로 guard 만들지 생각해보자)
+    const { sub } = req.user;
     res.clearCookie('Authorization', jwtCookieOptions);
     res.clearCookie('REFRESH_TOKEN', jwtCookieOptions);
-    await this.authService.updateRefreshToken(req.user.id, null);
+    await this.authService.updateRefreshToken(sub, null);
 
     res.sendStatus(200);
   }
@@ -58,11 +61,16 @@ export class AuthController {
   @ApiOperation({ summary: 'Refresh Token 검증으로 Access Token 발급' })
   @UseGuards(JwtRefreshAuthGuard)
   @Post('refresh')
-  refresh(@Req() req, @Res({ passthrough: true }) res) {
-    const accessToken = this.authService.createAccessToken(req.user);
+  async refresh(@Req() req, @Res({ passthrough: true }) res) {
+    const payload: JwtPayload = this.authService.getJwtPayload(req.user);
+    const { access_token, refresh_token } = await this.authService.createTokens(payload);
+
+    // refresh token update - user db table
+    await this.authService.updateRefreshToken(req.user.id, refresh_token);
 
     // 쿠키에 accessToken 설정
-    res.cookie('Authorization', accessToken, jwtCookieOptions);
+    res.cookie('Authorization', access_token, jwtCookieOptions);
+    res.cookie('REFRESH_TOKEN', refresh_token, jwtCookieOptions);
 
     return req.user;
   }
@@ -71,6 +79,7 @@ export class AuthController {
   @UseGuards(JwtAuthGuard)
   @Get('profile')
   getProfile(@Req() req) {
-    return req.user;
+    const { sub } = req.user;
+    return this.authService.me(sub);
   }
 }
