@@ -26,6 +26,9 @@ axios.interceptors.response.use(
         }
       } catch (err) {
         console.log('Refresh Token Error');
+        if (window.location.pathname !== '/login') {
+          window.location.replace('/login');
+        }
       }
     }
 
