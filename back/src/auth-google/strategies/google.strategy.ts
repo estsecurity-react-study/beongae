@@ -17,9 +17,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
 
   validate(accessToken: string, refreshToken: string, profile: Profile) {
     const { id, name, emails, photos } = profile;
-    console.log('GoogleStrategy profile ====== ', profile);
-    console.log('GoogleStrategy accessToken ====== ', accessToken);
-    console.log('GoogleStrategy refreshToken ====== ', refreshToken);
+    // console.log('GoogleStrategy profile ====== ', profile);
 
     return {
       provider: 'google',
@@ -29,8 +27,8 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
       lastName: name.familyName,
       email: emails[0].value,
       picture: photos[0].value,
-      accessToken,
-      refreshToken,
-    };
+      // accessToken,
+      // refreshToken,
+    }; // req.user 에 저장됨
   }
 }

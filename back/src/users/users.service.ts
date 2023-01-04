@@ -20,6 +20,11 @@ export class UsersService {
     return this.usersRepository.save(createUser);
   }
 
+  createEmptyPassword(createUserDto: CreateUserDto) {
+    const createUser = this.usersRepository.create({ ...createUserDto, password: '' });
+    return this.usersRepository.save(createUser);
+  }
+
   findById(id: number) {
     return this.usersRepository.findOne({
       where: { id },
