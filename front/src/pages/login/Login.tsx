@@ -57,6 +57,11 @@ const Login: React.FC = () => {
     }
   }, []);
 
+  const handleGoogleLogin = useCallback(async () => {
+    // await axios.get('/auth-google/login');
+    window.location.href = 'api/auth-google/login';
+  }, []);
+
   return (
     <div css={containerStyle}>
       <h2>Login</h2>
@@ -112,7 +117,7 @@ const Login: React.FC = () => {
             <span css={snsTextStyle}>네이버로 시작하기</span>
           </span>
         </button>
-        <button css={[btnSnsStyle, btnGoogleStyle]} type="button">
+        <button css={[btnSnsStyle, btnGoogleStyle]} type="button" onClick={handleGoogleLogin}>
           <span css={snsInnerStyle}>
             <span css={[snsIconStyle, googleIconStyle]} />
             <span css={snsTextStyle}>구글로 시작하기</span>
