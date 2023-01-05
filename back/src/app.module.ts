@@ -8,6 +8,7 @@ import { User } from './users/entities/user.entity';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { AuthGoogleModule } from './auth-google/auth-google.module';
+import { AuthKakaoModule } from './auth-kakao/auth-kakao.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { AuthGoogleModule } from './auth-google/auth-google.module';
     UsersModule,
     AuthModule,
     AuthGoogleModule,
+    AuthKakaoModule,
   ],
   controllers: [AppController],
   providers: [AppService],

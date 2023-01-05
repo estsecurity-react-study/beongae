@@ -59,7 +59,11 @@ const Login: React.FC = () => {
 
   const handleGoogleLogin = useCallback(async () => {
     // await axios.get('/auth-google/login');
-    window.location.href = 'api/auth-google/login';
+    window.location.href = '/api/auth-google/login';
+  }, []);
+
+  const handleKakaoLogin = useCallback(async () => {
+    window.location.href = '/api/auth-kakao/login';
   }, []);
 
   return (
@@ -105,7 +109,7 @@ const Login: React.FC = () => {
         </div>
       </form>
       <div css={snsWrapperStyle}>
-        <button css={[btnSnsStyle, btnKaKaoStyle]} type="button">
+        <button css={[btnSnsStyle, btnKaKaoStyle]} type="button" onClick={handleKakaoLogin}>
           <span css={snsInnerStyle}>
             <span css={[snsIconStyle, kakaoIconStyle]} />
             <span css={snsTextStyle}>카카오로 시작하기</span>
