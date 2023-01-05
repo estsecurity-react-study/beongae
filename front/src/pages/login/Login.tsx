@@ -58,12 +58,12 @@ const Login: React.FC = () => {
   }, []);
 
   const handleGoogleLogin = useCallback(async () => {
-    // await axios.get('/auth-google/login');
-    window.location.href = '/api/auth-google/login';
+    // await axios.get('/auth/google/login');
+    window.location.href = '/api/auth/google/login';
   }, []);
 
   const handleKakaoLogin = useCallback(async () => {
-    window.location.href = '/api/auth-kakao/login';
+    window.location.href = '/api/auth/kakao/login';
   }, []);
 
   return (

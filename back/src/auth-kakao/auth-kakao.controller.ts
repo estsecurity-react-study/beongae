@@ -3,7 +3,7 @@ import { jwtCookieOptions } from 'src/auth/jwt-cookie.options';
 import { AuthKakaoService } from './auth-kakao.service';
 import { KakaoOAuthGuard } from './guards/kakao-oauth.guard';
 
-@Controller('auth-kakao')
+@Controller('auth/kakao')
 export class AuthKakaoController {
   constructor(private readonly authKakaoService: AuthKakaoService) {}
 

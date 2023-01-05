@@ -3,7 +3,7 @@ import { jwtCookieOptions } from 'src/auth/jwt-cookie.options';
 import { AuthGoogleService } from './auth-google.service';
 import { GoogleOAuthGuard } from './guards/google-oauth.guard';
 
-@Controller('auth-google')
+@Controller('auth/google')
 export class AuthGoogleController {
   constructor(private readonly authGoogleService: AuthGoogleService) {}
 
@@ -13,7 +13,7 @@ export class AuthGoogleController {
     // google login 페이지로 이동됨
   }
 
-  @Get('redirect')
+  @Get('callback')
   @UseGuards(GoogleOAuthGuard)
   async googleAuthRedirect(@Req() req, @Res() res) {
     // google 인증 성공 (req.user 에 구글에서 전달받은 사용자 정보 있음)
